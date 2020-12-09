@@ -36,6 +36,7 @@ public class AttarctionController {
 		System.out.println("2020-12-09 01:44 Merge Test");
 		System.out.println("2020-12-09 09:53 Commit Test");
 		System.out.println("2020-12-09 09:53 Commit Test");
+		System.out.println("Ignore Test");
 	}
 	
 	
