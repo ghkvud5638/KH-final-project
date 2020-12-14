@@ -38,6 +38,9 @@ public class AttarctionController {
 		System.out.println("2020-12-09 09:53 Commit Test");
 		System.out.println("Ignore Test");
 		System.out.println("Ignore Test222");
+		
+		System.out.println("Ignore Test 12-14 LEE");
+		
 	}
 	
 	
