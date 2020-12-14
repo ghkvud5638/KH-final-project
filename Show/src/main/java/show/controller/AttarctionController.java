@@ -40,6 +40,7 @@ public class AttarctionController {
 		System.out.println("Ignore Test");
 		System.out.println("Ignore Test222");
 		System.out.println("Ignore Test333");
+		System.out.println("2020-12-15 PullTest");
 	}
 	
 	
