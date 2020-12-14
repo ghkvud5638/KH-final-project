@@ -47,6 +47,7 @@ public class AttarctionController {
 		System.out.println("2020-12-15 PullrequestTest3");
 		System.out.println("2020-12-15 PullrequestTest4");
 		System.out.println("2020-12-15 PullrequestTest5");
+		System.out.println("2020-12-15 ChkOutrequestTest");
 	}
 	
 	
