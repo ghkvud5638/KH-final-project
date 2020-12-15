@@ -23,4 +23,153 @@
 			AND adminid = #{value }
 	</select>
 	
+	<sql id="selectMember">
+		SELECT
+			member_id,         
+			member_pw,
+			member_name,
+			birth,
+			gender,
+			member_addr,
+			nick,
+			member_grade,
+			point
+		FROM tb_member
+	</sql>
+	
+	
+	<sql id="memberChoose">
+		<choose>
+	        <when test='search == "member_name"'>
+				WHERE member_name LIKE '%' || #{searchText} || '%'
+			</when>
+	        <when test='search == "member_id"'>
+				WHERE member_id LIKE '%' || #{searchText} || '%'
+			</when>
+	        <when test='search == "nick"'>
+				WHERE nick LIKE '%' || #{searchText} || '%'
+			</when>
+		</choose>
+	</sql>
+	
+	
+	
+	<sql id="selectMemberRownum">
+		SELECT
+			rownum rnum, B.*
+		FROM (
+			<include refid="selectMember" />
+			<include refid="memberChoose" />
+			ORDER BY member_id DESC
+		) B
+		ORDER BY rnum
+	</sql>
+	
+	
+	<select id="selectMemberListPaging" parameterType="show.util.Paging" resultType="show.dto.Member">
+		SELECT * FROM (
+			<include refid="selectMemberRownum" />
+		) R
+		<where>
+			rnum BETWEEN #{startNo } AND #{endNo }
+		</where>
+	</select>
+	
+	<select id="selectCntAll" parameterType="show.util.Paging" resultType="int">
+		SELECT count(*) FROM (
+			<include refid="selectMember" />
+			<include refid="memberChoose" />
+		) CNT
+	</select>
+	
+	<select id="selectmemberIdView" parameterType="show.dto.Member" resultType="show.dto.Member">
+		SELECT * FROM tb_member
+		WHERE member_id = #{member_id }
+	</select>
+	
+	<update id="memberUpdate" parameterType="show.dto.Member">
+		UPDATE tb_member
+		SET member_name = #{member_name }, nick = #{nick }, member_addr = #{member_addr }, member_grade = #{member_grade }, point = #{point }
+		WHERE member_id = #{member_id }
+	</update>
+	
+	<select id="adminShowList" parameterType="show.dto.TB_SHOW" resultType="show.dto.TB_SHOW">
+		SELECT * FROM tb_show
+		ORDER BY show_id
+	</select>
+	
+	<select id="selectShowIdView" parameterType="show.dto.TB_SHOW" resultType="show.dto.TB_SHOW">
+		SELECT * FROM tb_show
+		WHERE show_id = #{show_id }
+		ORDER BY show_id ASC
+	</select>
+	
+	<update id="adminShowUpdate" parameterType="show.dto.TB_SHOW">
+		UPDATE tb_show
+		SET show_division = #{show_division}
+			, show_genre = #{show_genre}
+			, show_place = #{show_place}
+			, show_name = #{show_name}
+			, show_rprice = #{show_rprice}
+			, show_sprice = #{show_sprice}
+			, show_time = #{show_time}
+			, show_lat = #{show_lat}
+			, show_len = #{show_len}
+			, show_call = #{show_call}
+			, show_image = #{show_image}
+			, show_cast = #{show_cast}
+			, show_age = #{show_age}
+			, show_host = #{show_host}
+			, show_sub = #{show_sub}
+			, show_addr = #{show_addr}
+		WHERE show_id = #{show_id }
+	</update>
+	
+	<insert id="adminShowInsert" parameterType="show.dto.TB_SHOW">
+		INSERT INTO tb_show (
+			show_id
+			, show_division
+			, show_genre
+			, show_place
+			, show_name
+			, show_start
+			, show_end
+			, show_rprice
+			, show_sprice
+			, show_time
+			, show_lat
+			, show_len
+			, show_call
+			, show_image
+			, show_cast
+			, show_age
+			, show_host
+			, show_sub
+			, show_addr
+			)
+		VALUES (
+			#{show_id}
+			, #{show_division}
+			, #{show_genre}
+			, #{show_place}
+			, #{show_name}
+			, TO_CHAR(#{show_start},'RR/MM/DD')
+			, TO_CHAR(#{show_end},'RR/MM/DD')
+			, #{show_rprice}
+			, #{show_sprice}
+			, #{show_time}
+			, #{show_lat}
+			, #{show_len}
+			, #{show_call}
+			, #{show_image}
+			, #{show_cast}
+			, #{show_age}
+			, #{show_host}
+			, #{show_sub}
+			, #{show_addr})
+	</insert>
+	
+	
+	
+	
 </mapper>

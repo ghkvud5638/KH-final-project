@@ -40,14 +40,6 @@ public class AttarctionController {
 		System.out.println("Ignore Test");
 		System.out.println("Ignore Test222");
 		System.out.println("Ignore Test333");
-		System.out.println("2020-12-15 PullTest");
-		System.out.println("2020-12-15 MergeTest");
-		System.out.println("2020-12-15 PullrequestTest");
-		System.out.println("2020-12-15 PullrequestTest2");
-		System.out.println("2020-12-15 PullrequestTest3");
-		System.out.println("2020-12-15 PullrequestTest4");
-		System.out.println("2020-12-15 PullrequestTest5");
-		System.out.println("2020-12-15 ChkOutrequestTest");
 	}
 	
 	

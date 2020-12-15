@@ -1,6 +1,11 @@
 package show.dao.face;
 
+import java.util.List;
+
 import show.dto.Admin;
+import show.dto.Member;
+import show.dto.TB_SHOW;
+import show.util.AdminMemberPaging;
 
 public interface AdminDao {
 	
@@ -19,5 +24,39 @@ public interface AdminDao {
 	 * @return Login - 조회된 회원 정보
 	 */
 	public Admin selectAdminById(String adminid);
+
+	/**
+	 * 유저 전체 조회
+	 * @return - 전체 유저
+	 */
+	public List<Member> selectAllMember();
+
+	/**
+	 * 조회 개수 카운트
+	 * @param paging - 조회 개수 카운트
+	 * @return - 개수 카운트 반환
+	 */
+	public int selectCntAll(AdminMemberPaging paging);
+	
+	/**
+	 * 멤버 전체 조회
+	 * @param paging - 전체 조회
+	 * @return 전체 조회 반환
+	 */
+	
+	public List<Member> selectMemberListPaging(AdminMemberPaging paging);
+
+	
+	public Member selectmemberIdView(Member member);
+
+	public void memberUpdate(Member member);
+
+	public List<TB_SHOW> adminShowList();
+
+	public void adminShowUpdate(TB_SHOW tb_show);
+
+	public TB_SHOW selectShowIdView(TB_SHOW tb_show);
+
+	public void adminShowInsert(TB_SHOW tb_show);
 
 }

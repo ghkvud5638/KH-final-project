@@ -1,5 +1,7 @@
 package show.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -11,24 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import show.dto.Admin;
+import show.dto.Member;
+import show.dto.TB_SHOW;
 import show.service.face.AdminService;
+import show.util.AdminMemberPaging;
 
 @Controller
 public class AdminController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
-	
-//	@Autowired
-//	private MemberService memberService;
+private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 	
 	@Autowired
 	private AdminService adminService;
 	
-	@Autowired
-//	private AdminShowListService adminShowListservice;
 	
-	
-	@RequestMapping(value="/admin/main")
+	@RequestMapping(value="/admin/main")  //대쉬보드 예정
 	public void main() {
 		logger.info("관리자메인페이지");
 	}
@@ -75,39 +73,141 @@ public class AdminController {
 		model.addAttribute("info", info);
 		
 	}
-	
-//	@RequestMapping(value="/admin/memberlist", method=RequestMethod.GET)
-//	public String memberlist(Model model) {
-//		
-//		logger.info("유저 리스트 페이지 시작");
-//		
-//		//Service 메소드호출
-//		List<Member> list = memberService.serviceMember();
-//		
-//		//View에 모델값 전달
-//		model.addAttribute("list", list);
-//		
-//		//View 지정하고 Forwarding
-//		return "/admin/memberlist";
-//	}
+
 	
 	@RequestMapping(value = "/admin/loginfail", method = RequestMethod.GET)
 	public void adminloginfile() { }
 
-//	@RequestMapping(value ="/admin/showlist", method = RequestMethod.GET)
-//	public String adminshowlist(Model model) {
+	
+	
+//	@RequestMapping(value = "/admin/main") //대쉬보드 테스트
+//	public String adminTestmain() {
 //		
-//		logger.info("쇼 리스트 페이지 시작");
-//		
-//		//Service 메소드 호출
-//		List<Show> list = adminShowListservice.serviceShowList();
-//		
-//		//View에 모델값 전달
-//		model.addAttribute("list", list);
-//		
-//		//View 지정하고Forwarding
-//		return "/admin/showlist";
+//		return "/admin/adm_main";
 //		
 //	}
 	
+	@RequestMapping(value = "/admin/memberlist") 
+	public String adminMemberList( AdminMemberPaging curPage, Model model, HttpSession session ) {
+		
+		//페이징 계산
+		AdminMemberPaging paging = adminService.selectCntAll(curPage);
+		paging.setSearch(curPage.getSearch());
+		paging.setSearchText(curPage.getSearchText());
+		
+		model.addAttribute("paging", paging);
+		
+		//게시글 목록
+		List<Member> list = adminService.selectMemberListPaging(paging);
+		model.addAttribute("list", list);
+
+		return "/admin/adminmemberlist";
+	}
+	
+	@RequestMapping(value = "/admin/memberupdate", method=RequestMethod.GET)
+	public String adminMemberUpdateGet(Member member, Model model) {
+		
+		member = adminService.selectmemberIdView(member);
+		model.addAttribute("view", member);
+		
+//		logger.info("업데이트 GET : " + model.addAttribute("view", member));
+		
+		return "/admin/adminmemberupdate";
+	}
+	
+	@RequestMapping(value = "/admin/memberupdate", method=RequestMethod.POST)
+	public String adminMemberUpdatePost(Member member) {
+		
+//		logger.info("업데이트 POST : " + member );
+		
+		adminService.memberUpdate(member);
+		
+		return "redirect:/admin/memberlist?search=member_id&searchText=" + member.getMember_id();
+//		return "redirect:/admin/memberlist";
+
+	}
+	
+	
+//	@RequestMapping(value = "/adminstest/adminnotice")
+//	public void adminNotice() {
+	
+//	}
+
+	
+//	@RequestMapping(value = "/adminstest/adminads")
+//	public void adminAds() {
+	
+//	}
+	
+//	@RequestMapping(value = "/adminstest/admintiketing")
+//	public void adminTiketing() {
+
+//	}
+	
+	@RequestMapping(value = "/admin/showlist")
+	public String adminShowList(Model model) {
+		
+		List<TB_SHOW> list = adminService.adminShowList();
+		model.addAttribute("showList", list);
+		
+//		logger.info("어드민 쇼 리스트 : " + list);
+		
+		return "/admin/adminshowlist";
+		
+	}
+	
+	@RequestMapping(value = "/admin/showupdate", method = RequestMethod.GET)
+	public String adminShowUpdateGet(TB_SHOW tb_show, Model model) {
+		
+//		logger.info("어드민 쇼 업데이트 : " + tb_show);
+			
+		tb_show = adminService.selectShowIdView(tb_show);
+		model.addAttribute("view", tb_show);	
+		
+//		logger.info("어드민 쇼 업데이트 view : " + model.addAttribute("view", tb_show) );
+		
+		return "/admin/adminshowupdate";
+		
+	}
+	
+	@RequestMapping(value = "/admin/showupdate", method = RequestMethod.POST)
+	public String adminShowUpdatePost(TB_SHOW tb_show, Model model) {
+		
+//		logger.info("어드민 쇼 업데이트 들어갑니다 : " + tb_show);
+			
+		adminService.adminShowUpdate(tb_show);
+		
+		return "redirect:/admin/showlist";
+		
+	}
+	
+	@RequestMapping(value = "/admin/showinsert", method = RequestMethod.GET)
+	public String adminShowInsertGet() {
+		
+		return "/admin/adminshowinsert";
+	}
+	
+	@RequestMapping(value = "/admin/showinsert", method = RequestMethod.POST)
+	public String adminShowInsertPost(TB_SHOW tb_show) {
+		
+//		logger.info("쇼 인설트 : " + tb_show);
+		
+		adminService.adminShowInsert(tb_show);
+		
+		
+		return "redirect:/admin/showlist";
+	}
+	
+
+	
+	
+	
+//	@RequestMapping(value = "/adminstest/adminattraction")
+//	public void adminAttraction() {
+	
+//	}
+
+	
+	
 }
+
