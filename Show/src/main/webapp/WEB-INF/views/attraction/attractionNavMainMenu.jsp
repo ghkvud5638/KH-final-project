@@ -14,14 +14,9 @@
 	$(document).ready(function(){
 		self.onerror=function() {return true;}
 
-	var scrollHeight = 40;
-	var scrollWidth = 140;
-	var pageno = 1;
+
 	var chk = false;
-// 	var top =   scrollHeight - $(window).scrollTop()
-// 	, left = scrollWidth -$(window).scrollLeft() ;
-// 	$(".nav").css("bottom", top+'px');
-// 	$(".nav").css("right", left+"px");
+
 
 	$('.nav').click(function(){
 		console.log("클릭")
@@ -31,7 +26,6 @@
 					, url: "/attraction/nav" //요청 URL
 					, data: {
 								"curPage" : 1
-								,"listNo" : 5
 
 							} //전달 파라미터
 					, dataType: "html" //응답받은 데이터의 형식
@@ -39,7 +33,6 @@
 						chk = true;
 						console.log("성공")
 						$(document.body).append(res);
-						pageno = 2
 						console.log(pageno);
 					}
 					, error: function() {
@@ -56,27 +49,6 @@
 	});
 		
 
-// 		function sidebar(){
-			
-// 			top = scrollHeight - $(window).scrollTop();	
-// 			$(".nav").css("bottom", top+'px');
-// 			console.log(top)
-	
-// 			left = scrollWidth -$(window).scrollLeft() ;
-// 			console.log("내값은"+left)
-// 			$(".nav").css("right", left+'px');
-		
-// 			console.log($(window).innerHeight())
-
-		
-// 		}
-		
-	
-// 		$(window).scroll(()=> {
-// 			sidebar();
-// 			console.log($(window).scrollTop())
-// 			console.log($(window).scrollLeft())	
-// 		});	
 
 		
 	});

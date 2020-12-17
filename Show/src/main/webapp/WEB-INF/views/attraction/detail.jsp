@@ -14,6 +14,8 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
+		
+		var attno = ${attraction.attraction_no}
 	
 // 		console.log($('#attraction-detail-contentId').innerHTML)
 // 		console.log("${attraction.attraction_content }")
@@ -178,13 +180,11 @@
 				console.log("mapchk=" + mapchk )
 				console.log("loc=" + loc )
 						
-				var no2 = document.location.href.split("attraction_no=")
-				console.log(no2[1])
 				$.ajax({
 					type: "GET" //요청 메소드
 					, url: loc //요청 URL
 					, data: {
-								"attraction_no" : no2[1],
+								"attraction_no" : attno,
 							    "ajaxChk" : true , 
 							    "curPage" : 1,
 							    "chk" : true,
@@ -303,6 +303,56 @@
 			}
 			location.href= "/attraction/list?"+area+cate+"="+cateName+"&curPage=1";
 
+		})
+		
+		
+		var scrapChk = ${scrapChk}
+		var loginChk = ${login}
+		console.log(loginChk)
+		$('.attraction-detail-scrapSpan').click(function(){
+			if(loginChk === undefined){
+				alert("로그인해야만 가능합니다")
+				return;
+			}
+
+				var delChk = false;
+				var insChk = false;
+				var scrapText = "스크랩하기"
+			if(scrapChk){
+				 delChk = true;
+				 scrapChk = false;
+				
+			} else {
+				insChk = true;
+				 scrapChk = true;
+				 scrapText = "스크랩취소하기"
+			}
+			
+		
+
+			
+			$.ajax({
+					type: "GET" //요청 메소드
+					, url: "/attraction/navList" //요청 URL
+					, data: {
+								"attraction_no" : attno
+								,"delete" : delChk
+								,"insert" : insChk
+								, "whereList" : 3			
+								} //전달 파라미터
+					, dataType: "html" //응답받은 데이터의 형식
+					, success: function( res ) {
+						console.log("성공")
+						$(".attraction-detail-scrapSpan").html(scrapText);
+						$('#Nav-sideMenu-attractionList').trigger("click");
+
+					}
+					, error: function() {
+						console.log("실패")
+					}
+					
+				})
+			
 		})
 		
 	});
@@ -491,7 +541,14 @@ P {
 		<h1 style="font-family: 'Nanum Brush Script', cursive; font-size: 53px;">${attraction.attraction_title }</h1>
 	
 	</div>
-		<div class="attraction-detail-scrapSpan">스크랩하기</div>		
+		<span class="attraction-detail-scrapSpan">
+		<c:if test="${scrapChk eq false }">
+		스크랩하기
+		</c:if>
+		<c:if test="${scrapChk eq true }">
+		스크랩취소하기
+		</c:if>
+		</span>		
 	
 	<div class="attraction-detail-imgMainDiv">
 			<div class="attraction-detail-imgDiv">

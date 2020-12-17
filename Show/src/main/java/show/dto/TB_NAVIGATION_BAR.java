@@ -10,16 +10,17 @@ public class TB_NAVIGATION_BAR {
 	private String	visit_attno;
 	private String	visit_showno_pr;
 	private String	visit_showno;
-	private String  user_id;
-	private String  user_id_no;
-
+	private String  scrap_userid;
+	private String  scrap_userid_no;
+	
 	@Override
 	public String toString() {
 		return "TB_NAVIGATION_BAR [attno_pr=" + attno_pr + ", attno=" + attno + ", showno_pr=" + showno_pr + ", showno="
 				+ showno + ", vist_attno_pr=" + vist_attno_pr + ", visit_attno=" + visit_attno + ", visit_showno_pr="
-				+ visit_showno_pr + ", visit_showno=" + visit_showno + ", user_id=" + user_id + ", user_id_no="
-				+ user_id_no + "]";
+				+ visit_showno_pr + ", visit_showno=" + visit_showno + ", scrap_userid=" + scrap_userid
+				+ ", scrap_userid_no=" + scrap_userid_no + "]";
 	}
+
 	public String getAttno_pr() {
 		return attno_pr;
 	}
@@ -68,19 +69,19 @@ public class TB_NAVIGATION_BAR {
 	public void setVisit_showno(String visit_showno) {
 		this.visit_showno = visit_showno;
 	}
-	public String getUser_id() {
-		return user_id;
+	public String getScrap_userid() {
+		return scrap_userid;
 	}
-	public void setUser_id(String user_id) {
-		this.user_id = user_id;
+	public void setScrap_userid(String scrap_userid) {
+		this.scrap_userid = scrap_userid;
 	}
-	public String getUser_id_no() {
-		return user_id_no;
+	public String getScrap_userid_no() {
+		return scrap_userid_no;
 	}
-	public void setUser_id_no(String user_id_no) {
-		this.user_id_no = user_id_no;
+	public void setScrap_userid_no(String scrap_userid_no) {
+		this.scrap_userid_no = scrap_userid_no;
 	}
-	
+
 	
 	
 	

@@ -12,76 +12,179 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+	var loginChk = ${login}
+	console.log(loginChk)
+// 	if(loginChk === undefined){
+// 		loginChk = "안녕"
+// 	}
+		
 // 		self.onerror=function() {return true;}
 			
-				
+	var i = 0;			
 	var scrollHeight = 30;
 	var scrollWidth = 20;
-
+	var totalCount = ${paging.totalCount}
+	var chkNumber = 0;
+	var whereList = 0;
+	var navOneclick = false;
+	
 	var top = $(window).scrollTop() + scrollHeight
 	, left = scrollWidth -$(window).scrollLeft() ;
 	$(".Nav-sideMenu-WrapDiv").css("top", top+'px');
 	$(".Nav-sideMenu-WrapDiv").css("right", left+"px");
 
 	$('.Nav-sideMenu-li').click(function(){
-		var idName = $(this).attr('id')
-		, listText = ""
-		, loc = ""
-		console.log("클릭")
+		if(navOneclick){
+			
+		} else{
+			navOneclick = true
+			i = 0
+			loadMoreChk = false
+	
+			var idName = $(this).attr('id')
+			, listText = ""
+			, loc = ""
+			console.log("클릭")
+			
 		
-		if(idName == "Nav-sideMenu-Home"){
-			listText = "홈입니다<br><br>"
-		}
-		if(idName == "Nav-sideMenu-showList"){
-			listText = "공연목록입니다<br><br>"
-			loc = "/attraction/nava"
-		}
-		if(idName == "Nav-sideMenu-attractionList"){
-			listText = "볼거리목록입니다<br><br>"
-			loc = "/attraction/nava"
+			if(idName == "Nav-sideMenu-showList"){
+				if(loginChk === undefined){
+					alert("로그인 해야만 볼 수 있습니다")
+					navOneclick = false
+					$('#Nav-sideMenu-Home').trigger("click");
 
-		}
-		if(idName == "Nav-sideMenu-visitList"){
-			listText = "방문목록입니다<br><br>"
-			loc = "/attraction/nava"
+					return;
+				}
+				listText = "공연목록입니다<br><br>"
+				loc = "/attraction/nava"
+			}
+			if(idName == "Nav-sideMenu-attractionList"){
+				if(loginChk === undefined){
+					alert("로그인 해야만 볼 수 있습니다")
+					navOneclick = false
+					$('#Nav-sideMenu-Home').trigger("click");
 
-		}
-	 	$(".Nav-sideMenu-listViewListDiv").css("opacity", "0");
-		$(".Nav-sideMenu-li").css("background-color", "white")
-		$(".Nav-sideMenu-li").css("text-decoration", "")
-		$(".Nav-sideMenu-li").css("font-weight", "")
-		$(".Nav-sideMenu-listViewText").html(listText);
-
-		$('#'+idName).css("background-color", "gray")
-		$('#'+idName).css("text-decoration", "underline")
-		$('#'+idName).css("font-weight", "bolder")
-		
-		$.ajax({
-					type: "GET" //요청 메소드
-					, url: loc //요청 URL
-					, data: {
-								"curPage" : 1
-								, "listNo" : 5
-								, "chkNumber" : 5
-							} //전달 파라미터
-					, dataType: "html" //응답받은 데이터의 형식
-					, success: function( res ) {
-						console.log("성공")
-						
-						$(".Nav-sideMenu-listViewListDiv").css("transition", "all 1s ease-in-out");
+					return;
+				}
+				listText = "볼거리목록입니다<br><br>"
+				loc = "/attraction/nava"
+					whereList = 3
+					chkNumber = 4
+	
+			}
+			if(idName == "Nav-sideMenu-visitList"){
+				listText = "방문목록입니다<br><br>"
+				loc = "/attraction/nava"
+					whereList = 4
+					chkNumber = 5
+	
+			}
+			$(".Nav-sideMenu-li").css("background-color", "white")
+			$(".Nav-sideMenu-li").css("text-decoration", "")
+			$(".Nav-sideMenu-li").css("font-weight", "")
+			$(".Nav-sideMenu-listViewText").html(listText);
+	
+			$('#'+idName).css("background-color", "gray")
+			$('#'+idName).css("text-decoration", "underline")
+			$('#'+idName).css("font-weight", "bolder")
+			if(idName == "Nav-sideMenu-Home"){
+				if(loginChk === undefined){
+					listText = "로그인해주세요<br>"
 				
-						$(".Nav-sideMenu-listViewListDiv").css("opacity", "1");
-
-						$(".Nav-sideMenu-listViewListDiv").html(res);
-					}
-					, error: function() {
-						console.log("실패")
-					}
+				} else{
+					listText = "로그아웃할까요?<br>"
 					
-				})	
+				}
+				$(".Nav-sideMenu-listViewListDiv").load("/attraction/login");
+				navOneclick = false
+				$(".Nav-sideMenu-listViewText").html(listText);
+
+				return;
+
+			}
+		 	$(".Nav-sideMenu-listViewListDiv").css("opacity", "0");
+
+			setTimeout(function() {
+			$(".Nav-sideMenu-listViewListDiv").empty()
+			$('#Nav-sideMenu-loadMore').trigger("click");
+			navOneclick = false
+	
+			}, 1000);
+			
+		}
+
+
+			
 	});
+	
+	var loadMoreChk = false;
+	$('#Nav-sideMenu-loadMore').on("click", function(){
+				if(loadMoreChk == false ){
+					loadMoreChk = true	
+						listNo = 1
+					console.log("클릭")
+
+					for(var k=0; k<5; k++){
+						$('#Nav-sideMenu-loadMore').css("display", "none")
+
+						i++
+					$.ajax({
+								type: "GET" //요청 메소드
+								, url: "/attraction/nava" //요청 URL
+								, data: {
+											"curPage" : i
+											,"listNo" : listNo
+											,"chkNumber" : chkNumber
+											,"whereList" : whereList
+										} //전달 파라미터
+								, dataType: "html" //응답받은 데이터의 형식
+								, async:false
+								, success: function( res ) {
+									console.log("성공")
+									console.log(res)
+									
+									$(".Nav-sideMenu-listViewListDiv").append(res);
+// 									$(".Nav-sideMenu-listViewListDiv").append($(res).find($('#total')));
+									$(".Nav-sideMenu-listViewListDiv").css("transition", "all 1s ease-in-out");
+									
+									
+									$(".Nav-sideMenu-listViewListDiv").css("opacity", "1");
+									
+									totalCount = $('#total').val()
+									
+								}
+								, error: function() {
+									console.log("실패")
+								}
+								
+							})	
+							
+								
+
+							if(i >= totalCount){
+// 								alert("안해용")
+								loadMoreChk = true
+
+								return;
+							} else{
+								loadMoreChk = false
+
+								$('#Nav-sideMenu-loadMore').css("display", "")
+								
+							}
+						}
+					} else{
+// 			 			alert("한번만합시다")
+			 			totalCount--
+						return;
+					}
+				
+
+				});
+	
 	//시작할때 목록 불러오기		
-	$('#Nav-sideMenu-visitList').trigger("click");
+// 	$('#Nav-sideMenu-visitList').trigger("click");
+	$('#Nav-sideMenu-Home').trigger("click");
 
 
 		function sidebar(){
@@ -171,7 +274,7 @@
 	margin-top:-15px;
 	overflow-x:hidden;
 	overflow-y:visible;
-
+	tr
 }
 
 .Nav-sideMenu-listViewText {
@@ -223,20 +326,19 @@
 <br>
 <br>
 <br>
-
-	<div class="Nav-sideMenu-listViewDiv">
-	<span class="Nav-sideMenu-listViewText"></span>
-	
-				<div class="Nav-sideMenu-listViewListDiv">
-		</div>
-	
+		<div class="Nav-sideMenu-listViewDiv">
+		<span class="Nav-sideMenu-listViewText"></span>
 		
-	</div>
-		<div id="Nav-sideMenu-loadMore" style="display:none;">
-		load more
+					<div class="Nav-sideMenu-listViewListDiv">
+			</div>
+		
+			
 		</div>
-</div>
+			<div id="Nav-sideMenu-loadMore" style="display:none;">
+			loadMore
+			</div>
 
+</div>
 
 </body>
 </html>

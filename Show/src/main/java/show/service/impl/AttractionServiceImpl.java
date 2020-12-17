@@ -97,7 +97,11 @@ public class AttractionServiceImpl implements AttractionService {
 		return true;
 	}
 		
-	
+	@Override
+	public boolean scrapChk(HashMap<String, Object> searchList) {
+
+		return attractionDao.scrapChk(searchList);
+	}
 	
 	
 }

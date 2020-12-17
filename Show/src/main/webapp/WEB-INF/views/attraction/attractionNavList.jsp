@@ -16,86 +16,16 @@ $(document).ready(function(){
 		, removeChk = false
 		, listNo = 0
 		, loadMoreChk = false
-		, j = 0
-		, k = 1
-		if(i < ${paging.totalPage}){
-			$('#Nav-sideMenu-loadMore').css("display", "")
-		} 
-	
-	
-	
-	
-$('#Nav-sideMenu-loadMore').bind("click", function(){
-	if(loadMoreChk == false ){
-		loadMoreChk = true	
-		if(removeChk == true) {
-			listNo = 1
-		    j = i
-			i = j*5 + k++
-		} else {
-			listNo = 5
-			i++;	
-			k = 1;
-		}
-		console.log("클릭")
-		$.ajax({
-					type: "GET" //요청 메소드
-					, url: "/attraction/nava" //요청 URL
-					, data: {
-								"curPage" : i
-								,"listNo" : listNo
-								,"chkNumber" : 5
-							} //전달 파라미터
-					, dataType: "html" //응답받은 데이터의 형식
-					, success: function( res ) {
-						console.log("성공")
-						console.log(res)
-
-						if(removeChk == true) {
-							i = j
-							removeChk = false;
-						}
-// 						alert($('.Nav-navList-WrapListDiv').length)
-
-						$(".Nav-sideMenu-listViewListDiv").append(res);
-						$(".Nav-attraction-list").unbind();
-						$("#Nav-sideMenu-loadMore").unbind();
-// 						alert("나 몇번쨰?" + i)
-// 						res.off();
-// 						res.unbind();
-// 						$(this).unbind();
-						
-// 						alert(i);
-// 						alert(${paging.totalPage})
-							
-						
-						if($('.Nav-navList-WrapListDiv').length >= ${paging.totalCount}){
-							$('#Nav-sideMenu-loadMore').css("display", "none")
-							res.unbind();
-
-// 								alert("작동안해용")
-							return;	
-						}
-						loadMoreChk = false
-						
-					}
-					, error: function() {
-						console.log("실패")
-					}
-					
-				})	
-		} else{
-// 			alert("한번만합시다")
-			return;
-		}
 	
 
-	});
 	
-	$('.Nav-attraction-list').bind("click", function(){
+	
+	
+	
+	$('.Nav-attraction-list${paging.curPage }').on("click", function(){
 
 	var	attraction_no = $(this).attr('id')
-
+	var whereList = ${whereList}
 	removeChk = true;
 	$.ajax({
 				type: "GET" //요청 메소드
@@ -104,7 +34,7 @@ $('#Nav-sideMenu-loadMore').bind("click", function(){
 							"attraction_no" : attraction_no
 							,"delete" : true
 							,"insert" : false
-							, "whereList" : 4
+							, "whereList" : whereList
 						} //전달 파라미터
 				, dataType: "html" //응답받은 데이터의 형식
 				, success: function( res ) {
@@ -113,7 +43,9 @@ $('#Nav-sideMenu-loadMore').bind("click", function(){
 
 					 $("#Nav-navList-WrapListDiv" + attraction_no).css("height", "0");
 					 $("#Nav-navList-WrapListDiv" + attraction_no).css("opacity", "0");
-					$('#Nav-sideMenu-loadMore').trigger("click");
+				
+							$('#Nav-sideMenu-loadMore').trigger("click");
+				
 
 					setTimeout(function() {
 					$("#Nav-navList-WrapListDiv" + attraction_no).remove();	
@@ -168,13 +100,13 @@ $('#Nav-sideMenu-loadMore').bind("click", function(){
 
 
 
-.Nav-attraction-list {
+.Nav-attraction-list${paging.curPage } {
 	
 	float:right;	
 
 }
 
-.Nav-attraction-list:hover {
+.Nav-attraction-list${paging.curPage }:hover {
 	
 	text-decoration: underline;
 	cursor: pointer;
@@ -231,10 +163,10 @@ $('#Nav-sideMenu-loadMore').bind("click", function(){
 
 
 	<div class="Nav-navList-WrapDiv" style="width:100%; height:85%; ">
-	
+	<input type="hidden" value="${paging.totalCount }" id="total">
 	<c:forEach items="${list }" var="b" varStatus="sb">
 		<div class="Nav-navList-WrapListDiv" id="Nav-navList-WrapListDiv${b.attraction_no }" >
-			<span class="Nav-attraction-list" id=${b.attraction_no }>
+			<span class="Nav-attraction-list${paging.curPage }" id=${b.attraction_no }>
 			X
 			</span>
 			<br>
